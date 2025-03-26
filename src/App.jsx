@@ -1,10 +1,12 @@
-function App() {
+import './global.css';
+import { RecipeForm } from './components/RecipeForm/RecipeForm';
 
+function App() {
   return (
     <>
-      <h1>hello</h1>
+      <RecipeForm />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
