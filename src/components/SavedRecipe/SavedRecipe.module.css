@@ -1,0 +1,49 @@
+.recipeItem {
+  margin: 25px auto;
+  max-width: 400px;
+  width: 90%;
+  background-color: rgba(0, 0, 0, 0.75);
+  border-radius: 10px;
+  border: 3px solid rgba(255, 255, 255, 0.75);
+  color: #fff;
+}
+
+.recipePhoto {
+  height: 300px;
+  width: 100%;
+  object-fit: cover;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.recipeItemContentWrapper {
+  padding: 25px;
+}
+
+.paragraph {
+  margin: 0 0 15px;
+}
+
+.modifyButton,
+.deleteButton {
+  padding: 5px 15px;
+  color: #fff;
+  border-color: transparent;
+  border-radius: 4px;
+  font-weight: 600;
+  transition: opacity 100ms ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.modifyButton {
+  background-color: dodgerblue;
+}
+
+.deleteButton {
+  margin-right: 10px;
+  background-color: orangered;
+}

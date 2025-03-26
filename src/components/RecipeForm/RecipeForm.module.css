@@ -1,0 +1,56 @@
+.formHeader {
+  text-align: center;
+  margin: 25px 0;
+  font-size: 24px;
+  text-transform: uppercase;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 1);
+}
+
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 25px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+}
+
+.formLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 20px;
+  color: #fff;
+}
+
+.formInput {
+  margin-bottom: 16px;
+  padding: 8px;
+  border-radius: 4px;
+  min-height: 50px;
+  color: #fff;
+  background-color: #000;
+}
+
+.formInputPhoto {
+  color: #fff;
+  font-size: 14px;
+}
+
+.formSubmit {
+  margin-top: 20px;
+  padding: 12px;
+  font-size: 20px;
+  font-weight: 600;
+  border-radius: 4px;
+  background-color: green;
+  color: white;
+  border-color: transparent;
+  cursor: pointer;
+  transition: background-color 300ms ease;
+
+  &:hover {
+    background-color: darkgreen;
+  }
+}
