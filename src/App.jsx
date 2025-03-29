@@ -1,10 +1,8 @@
 import './global.css';
-import { RecipeForm } from './components/RecipeForm/RecipeForm';
+import { RecipesManager } from './components/RecipesManager/RecipesManager';
 
 function App() {
-  return (
-    <RecipeForm />
-  );
+  return <RecipesManager />;
 }
 
 export default App;

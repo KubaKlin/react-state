@@ -1,14 +1,18 @@
 import styles from './SavedRecipe.module.css';
 
 export const SavedRecipe = ({
-  handleDelete,
-  handleModify,
+  onDelete,
+  onModify,
   index,
   ingredients,
   allergens,
   cookingSteps,
   photo,
 }) => {
+  const handleModifyClick = () => {
+    onModify(index);
+  };
+
   return (
     <div className={styles.recipeItem}>
       {photo && (
@@ -26,16 +30,10 @@ export const SavedRecipe = ({
         <p className={styles.paragraph}>
           <strong>Steps:</strong> {cookingSteps}
         </p>
-        <button
-          onClick={() => handleDelete(index)}
-          className={styles.deleteButton}
-        >
+        <button onClick={() => onDelete(index)} className={styles.deleteButton}>
           Delete
         </button>
-        <button
-          onClick={() => handleModify(index)}
-          className={styles.modifyButton}
-        >
+        <button onClick={handleModifyClick} className={styles.modifyButton}>
           Modify
         </button>
       </div>

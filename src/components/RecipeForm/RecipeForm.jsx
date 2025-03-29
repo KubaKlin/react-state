@@ -1,18 +1,20 @@
 import { useState } from 'react';
 import styles from './RecipeForm.module.css';
-import { SavedRecipe } from '../SavedRecipe/SavedRecipe';
 import { RecipeFormTextarea } from './RecipeFormTextarea';
-import {getRecipesFromStorage, setRecipesInStorage} from "../../utilities/recipesInLocalStorage.jsx";
+import { RecipesList } from '../RecipesList/RecipesList';
 
-export const RecipeForm = () => {
+export const RecipeForm = ({
+  onAddRecipe,
+  onModifyRecipe,
+  recipes,
+  onDeleteRecipe,
+}) => {
   const [ingredients, setIngredients] = useState('');
   const [allergens, setAllergens] = useState('');
   const [cookingSteps, setCookingSteps] = useState('');
   const [photo, setPhoto] = useState('');
   const [photoFile, setPhotoFile] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-
-  const [recipes, setRecipes] = useState(getRecipesFromStorage);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -24,9 +26,8 @@ export const RecipeForm = () => {
       cookingSteps,
       photo,
     };
-    const updatedRecipes = [...recipes, newRecipe];
-    setRecipes(updatedRecipes);
-    setRecipesInStorage(updatedRecipes)
+
+    onAddRecipe(newRecipe);
 
     // clearing the fields after submit
     setIngredients('');
@@ -38,17 +39,14 @@ export const RecipeForm = () => {
   };
 
   const handleModify = (index) => {
-    const recipeToModify = recipes[index];
+    const recipeToModify = onModifyRecipe(index);
     setIngredients(recipeToModify.ingredients);
     setAllergens(recipeToModify.allergens);
     setCookingSteps(recipeToModify.cookingSteps);
     setPhoto(recipeToModify.photo);
-
-    handleDelete(index); // remove now edited recipe
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // scroll to top after clicking 'modify'
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     setIsEditing(true);
   };
-
 
   const handleIngredientsInputChange = (event) => {
     setIngredients(event.target.value);
@@ -68,18 +66,10 @@ export const RecipeForm = () => {
       setPhotoFile(event.target.value);
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPhoto(reader.result); // Base64 coded image
+        setPhoto(reader.result);
       };
       reader.readAsDataURL(file);
     }
-  };
-
-  const handleDelete = (index) => {
-    const updatedRecipes = recipes.filter(
-      (recipe, recipeIndex) => recipeIndex !== index,
-    );
-    setRecipes(updatedRecipes);
-    setRecipesInStorage(updatedRecipes)
   };
 
   return (
@@ -118,22 +108,11 @@ export const RecipeForm = () => {
           {isEditing ? 'Submit edit' : 'Submit new recipe'}
         </button>
       </form>
-
-      {recipes.length && <h3 className={styles.formHeader}>Saved Recipes</h3>}
-      <div className={styles.recipesWrapper}>
-      {recipes.map((recipe, index) => (
-        <SavedRecipe
-          key={recipe.id}
-          ingredients={recipe.ingredients}
-          allergens={recipe.allergens}
-          cookingSteps={recipe.cookingSteps}
-          photo={recipe.photo}
-          handleModify={handleModify}
-          handleDelete={handleDelete}
-          index={index}
-        />
-      ))}
-      </div>
+      <RecipesList
+        recipes={recipes}
+        onDeleteRecipe={onDeleteRecipe}
+        onModifyRecipe={handleModify}
+      />
     </>
   );
 };
