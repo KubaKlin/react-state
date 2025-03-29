@@ -2,6 +2,7 @@ import { useState } from 'react';
 import styles from './RecipeForm.module.css';
 import { SavedRecipe } from '../SavedRecipe/SavedRecipe';
 import { RecipeFormTextarea } from './RecipeFormTextarea';
+import {getRecipesFromStorage, setRecipesInStorage} from "../../utilities/recipesInLocalStorage.jsx";
 
 export const RecipeForm = () => {
   const [ingredients, setIngredients] = useState('');
@@ -11,14 +12,7 @@ export const RecipeForm = () => {
   const [photoFile, setPhotoFile] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
-  const [recipes, setRecipes] = useState(() => {
-    try {
-      const savedRecipes = JSON.parse(localStorage.getItem('recipes'));
-      return savedRecipes ?? [];
-    } catch {
-      return [];
-    }
-  });
+  const [recipes, setRecipes] = useState(getRecipesFromStorage);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -32,7 +26,7 @@ export const RecipeForm = () => {
     };
     const updatedRecipes = [...recipes, newRecipe];
     setRecipes(updatedRecipes);
-    localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+    setRecipesInStorage(updatedRecipes)
 
     // clearing the fields after submit
     setIngredients('');
@@ -85,7 +79,7 @@ export const RecipeForm = () => {
       (recipe, recipeIndex) => recipeIndex !== index,
     );
     setRecipes(updatedRecipes);
-    localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+    setRecipesInStorage(updatedRecipes)
   };
 
   return (
