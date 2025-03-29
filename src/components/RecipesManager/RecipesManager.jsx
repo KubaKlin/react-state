@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { RecipeForm } from '../RecipeForm/RecipeForm';
+import { RecipesList } from '../RecipesList/RecipesList';
 import {
   getRecipesFromStorage,
   setRecipesInStorage,
@@ -7,11 +8,13 @@ import {
 
 export const RecipesManager = () => {
   const [recipes, setRecipes] = useState(getRecipesFromStorage);
+  const [editingRecipe, setEditingRecipe] = useState(null);
 
   const handleAddRecipe = (newRecipe) => {
     const updatedRecipes = [...recipes, newRecipe];
     setRecipes(updatedRecipes);
     setRecipesInStorage(updatedRecipes);
+    setEditingRecipe(null);
   };
 
   const handleDeleteRecipe = (index) => {
@@ -20,20 +23,23 @@ export const RecipesManager = () => {
     );
     setRecipes(updatedRecipes);
     setRecipesInStorage(updatedRecipes);
+    setEditingRecipe(null);
   };
 
   const handleModifyRecipe = (index) => {
     const recipeToModify = recipes[index];
     handleDeleteRecipe(index);
-    return recipeToModify;
+    setEditingRecipe(recipeToModify);
   };
 
   return (
-    <RecipeForm
-      onAddRecipe={handleAddRecipe}
-      onModifyRecipe={handleModifyRecipe}
-      recipes={recipes}
-      onDeleteRecipe={handleDeleteRecipe}
-    />
+    <>
+      <RecipeForm onAddRecipe={handleAddRecipe} editingRecipe={editingRecipe} />
+      <RecipesList
+        recipes={recipes}
+        onDeleteRecipe={handleDeleteRecipe}
+        onModifyRecipe={handleModifyRecipe}
+      />
+    </>
   );
 };

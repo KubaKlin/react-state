@@ -1,20 +1,27 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from './RecipeForm.module.css';
 import { RecipeFormTextarea } from './RecipeFormTextarea';
-import { RecipesList } from '../RecipesList/RecipesList';
 
-export const RecipeForm = ({
-  onAddRecipe,
-  onModifyRecipe,
-  recipes,
-  onDeleteRecipe,
-}) => {
+export const RecipeForm = ({ onAddRecipe, editingRecipe }) => {
   const [ingredients, setIngredients] = useState('');
   const [allergens, setAllergens] = useState('');
   const [cookingSteps, setCookingSteps] = useState('');
   const [photo, setPhoto] = useState('');
   const [photoFile, setPhotoFile] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (editingRecipe) {
+      setIngredients(editingRecipe.ingredients);
+      setAllergens(editingRecipe.allergens);
+      setCookingSteps(editingRecipe.cookingSteps);
+      setPhoto(editingRecipe.photo);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setIsEditing(true);
+    } else {
+      setIsEditing(false);
+    }
+  }, [editingRecipe]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -35,17 +42,6 @@ export const RecipeForm = ({
     setCookingSteps('');
     setPhoto('');
     setPhotoFile('');
-    setIsEditing(false);
-  };
-
-  const handleModify = (index) => {
-    const recipeToModify = onModifyRecipe(index);
-    setIngredients(recipeToModify.ingredients);
-    setAllergens(recipeToModify.allergens);
-    setCookingSteps(recipeToModify.cookingSteps);
-    setPhoto(recipeToModify.photo);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setIsEditing(true);
   };
 
   const handleIngredientsInputChange = (event) => {
@@ -108,11 +104,6 @@ export const RecipeForm = ({
           {isEditing ? 'Submit edit' : 'Submit new recipe'}
         </button>
       </form>
-      <RecipesList
-        recipes={recipes}
-        onDeleteRecipe={onDeleteRecipe}
-        onModifyRecipe={handleModify}
-      />
     </>
   );
 };
