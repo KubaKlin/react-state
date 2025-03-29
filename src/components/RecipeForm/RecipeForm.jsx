@@ -1,39 +1,60 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import styles from './RecipeForm.module.css';
 import { SavedRecipe } from '../SavedRecipe/SavedRecipe';
 import { RecipeFormTextarea } from './RecipeFormTextarea';
-import { handleModify } from '../../utilities/handleModify';
-import { handleSubmit } from '../../utilities/handleSubmit';
 
 export const RecipeForm = () => {
   const [ingredients, setIngredients] = useState('');
   const [allergens, setAllergens] = useState('');
   const [cookingSteps, setCookingSteps] = useState('');
   const [photo, setPhoto] = useState('');
-  const [recipes, setRecipes] = useState([]);
+  const [photoFile, setPhotoFile] = useState('');
   const [isEditing, setIsEditing] = useState(false);
 
-  const onSubmitHandler = (event) => {
-    handleSubmit(
-      event,
-      recipes,
+  const [recipes, setRecipes] = useState(() => {
+    try {
+      const savedRecipes = JSON.parse(localStorage.getItem('recipes'));
+      return savedRecipes ?? [];
+    } catch {
+      return [];
+    }
+  });
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const newRecipe = {
+      id: Date.now(),
       ingredients,
       allergens,
       cookingSteps,
       photo,
-      setRecipes,
-      setIngredients,
-      setAllergens,
-      setCookingSteps,
-      setPhoto,
-      setIsEditing,
-    );
+    };
+    const updatedRecipes = [...recipes, newRecipe];
+    setRecipes(updatedRecipes);
+    localStorage.setItem('recipes', JSON.stringify(updatedRecipes));
+
+    // clearing the fields after submit
+    setIngredients('');
+    setAllergens('');
+    setCookingSteps('');
+    setPhoto('');
+    setPhotoFile('');
+    setIsEditing(false);
   };
 
-  useEffect(() => {
-    const savedRecipes = JSON.parse(localStorage.getItem('recipes')) || [];
-    setRecipes(savedRecipes);
-  }, []);
+  const handleModify = (index) => {
+    const recipeToModify = recipes[index];
+    setIngredients(recipeToModify.ingredients);
+    setAllergens(recipeToModify.allergens);
+    setCookingSteps(recipeToModify.cookingSteps);
+    setPhoto(recipeToModify.photo);
+
+    handleDelete(index); // remove now edited recipe
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // scroll to top after clicking 'modify'
+    setIsEditing(true);
+  };
+
 
   const handleIngredientsInputChange = (event) => {
     setIngredients(event.target.value);
@@ -50,6 +71,7 @@ export const RecipeForm = () => {
   const handlePhotoInputChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      setPhotoFile(event.target.value);
       const reader = new FileReader();
       reader.onloadend = () => {
         setPhoto(reader.result); // Base64 coded image
@@ -69,7 +91,7 @@ export const RecipeForm = () => {
   return (
     <>
       <h3 className={styles.formHeader}>Recipes bank</h3>
-      <form onSubmit={onSubmitHandler} className={styles.formWrapper}>
+      <form onSubmit={handleSubmit} className={styles.formWrapper}>
         <RecipeFormTextarea
           name="ingredients"
           value={ingredients}
@@ -95,6 +117,7 @@ export const RecipeForm = () => {
           type="file"
           name="photo"
           onChange={handlePhotoInputChange}
+          value={photoFile}
           className={styles.formInputPhoto}
         />
         <button type="submit" className={styles.formSubmit}>
@@ -103,6 +126,7 @@ export const RecipeForm = () => {
       </form>
 
       {recipes.length && <h3 className={styles.formHeader}>Saved Recipes</h3>}
+      <div className={styles.recipesWrapper}>
       {recipes.map((recipe, index) => (
         <SavedRecipe
           key={recipe.id}
@@ -110,22 +134,12 @@ export const RecipeForm = () => {
           allergens={recipe.allergens}
           cookingSteps={recipe.cookingSteps}
           photo={recipe.photo}
-          handleModify={() =>
-            handleModify(
-              index,
-              recipes,
-              setIngredients,
-              setAllergens,
-              setCookingSteps,
-              setPhoto,
-              handleDelete,
-              setIsEditing,
-            )
-          }
+          handleModify={handleModify}
           handleDelete={handleDelete}
           index={index}
         />
       ))}
+      </div>
     </>
   );
 };

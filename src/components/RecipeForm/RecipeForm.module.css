@@ -7,6 +7,11 @@
   text-shadow: 0 2px 8px rgba(0, 0, 0, 1);
 }
 
+.recipesWrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .formWrapper {
   display: flex;
   flex-direction: column;
