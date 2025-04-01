@@ -7,7 +7,7 @@ export const RecipeFormTextarea = ({
   name,
 }) => {
   return (
-    <>
+    <div className={styles.inputWrapper}>
       <label htmlFor="ingredients" className={styles.formLabel}>
         {`Recipe ${name}`}
       </label>
@@ -19,6 +19,6 @@ export const RecipeFormTextarea = ({
         className={styles.formInput}
         required={true}
       />
-    </>
+    </div>
   );
 };

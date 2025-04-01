@@ -5,7 +5,7 @@ export const RecipesList = ({ recipes, onDeleteRecipe, onModifyRecipe }) => {
   if (!recipes.length) return null;
 
   return (
-    <>
+    <div>
       <h3 className={styles.formHeader}>Saved Recipes</h3>
       <div className={styles.recipesWrapper}>
         {recipes.map((recipe, index) => (
@@ -21,6 +21,6 @@ export const RecipesList = ({ recipes, onDeleteRecipe, onModifyRecipe }) => {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 };

@@ -29,6 +29,12 @@
   color: #fff;
 }
 
+.inputWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 .formInput {
   margin-bottom: 16px;
   padding: 8px;
