@@ -1,10 +1,8 @@
-function App() {
+import './global.css';
+import { RecipesManager } from './components/RecipesManager/RecipesManager';
 
-  return (
-    <>
-      <h1>hello</h1>
-    </>
-  )
+function App() {
+  return <RecipesManager />;
 }
 
-export default App
+export default App;
