@@ -52,8 +52,8 @@ export const RecipesManager = () => {
   };
 
   const handleFormChange = (field, value) => {
-    setFormState(prev => ({
-      ...prev,
+    setFormState(previous => ({
+      ...previous,
       [field]: value
     }));
   };
